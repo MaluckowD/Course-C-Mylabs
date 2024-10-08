@@ -4,10 +4,10 @@
 #include <math.h>
 #include <time.h>
 
-#define MAX_COORDS 100 // Максимальное количество координат
+#define MAX_COORDS 100
 
 // Функция для определения попадания точки в заданную область
-int isInArea(double x, double y, double a, double R)
+int isInArea(float x, float y, float a, float R)
 {
   bool a1 = (x >= -a) && (x <= a);
   bool b1 = (y <= 2 * R) && (y >= -2 * R);
@@ -16,7 +16,7 @@ int isInArea(double x, double y, double a, double R)
   return (a1 && b1 && c1 && d1);
 }
 
-void printResults(double (*coords)[2], int N, double R, double a)
+void printResults(float (*coords)[2], int N, float R, float a)
 {
   printf("Points inside the area:\n");
   for (int i = 0; i < N; i++)
@@ -38,7 +38,7 @@ void printResults(double (*coords)[2], int N, double R, double a)
 }
 
 // Функция для задания массива через random
-void randomCoords(int N, double R, double a, double (*coords)[2])
+void randomCoords(int N, float R, float a, float (*coords)[2])
 {
   double x_min, x_max, y_min, y_max;
   printf("Enter the minimum value of x: ");
@@ -53,8 +53,8 @@ void randomCoords(int N, double R, double a, double (*coords)[2])
 
   for (int i = 0; i < N; i++)
   {
-    (*(coords + i))[0] = x_min + (double)rand() / RAND_MAX * (x_max - x_min);
-    (*(coords + i))[1] = y_min + (double)rand() / RAND_MAX * (y_max - y_min);
+    (*(coords + i))[0] = x_min + (float)rand() / RAND_MAX * (x_max - x_min);
+    (*(coords + i))[1] = y_min + (float)rand() / RAND_MAX * (y_max - y_min);
   }
 
   for (int i = 0; i < N; i++)
@@ -66,12 +66,12 @@ void randomCoords(int N, double R, double a, double (*coords)[2])
 }
 
 // Функция для задания массива координат через ввод с клавиатуры
-void inputCoords(int N, double R, double a, double (*coords)[2])
+void inputCoords(int N, float R, float a, float (*coords)[2])
 {
   for (int i = 0; i < N; i++)
   {
     printf("Input coords %d (x y): ", i + 1);
-    scanf("%lf %lf", &(*(coords + i))[0], &(*(coords + i))[1]);
+    scanf("%f %f", &(*(coords + i))[0], &(*(coords + i))[1]);
   }
 
   for (int i = 0; i < N; i++)
@@ -84,7 +84,7 @@ void inputCoords(int N, double R, double a, double (*coords)[2])
 
 int main()
 {
-  double R, a;
+  float R, a;
   printf("Input a, R:\n");
   scanf("%lf %lf", &a, &R);
   if ((a < 0) || (R < 0))
@@ -107,9 +107,9 @@ int main()
   printf("2. Randomly\n");
   scanf("%d", &choice);
 
-  double coords[MAX_COORDS][2];
+  float coords[MAX_COORDS][2];
 
-  void (*funcs[])(int, double, double, double(*)[2]) = {inputCoords, randomCoords};
+  void (*funcs[])(int, float, float, float(*)[2]) = {inputCoords, randomCoords};
   if (choice == 1)
   {
     funcs[0](N, R, a, coords);
