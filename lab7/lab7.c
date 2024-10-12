@@ -3,12 +3,33 @@
 #include <math.h>
 #include <time.h>
 
+
+int *generate_array(int N) {
+  int *array = (int *)malloc(sizeof(int) * N);
+  if (array == NULL) {
+    return NULL;
+  }
+  return array;
+}
+void Random_filling(int *A, int N, int x_max, int x_min){
+  srand(time(NULL));
+  for (int i = 0; i < N; i++)
+  {
+    *(A + i) = rand() % (x_max - x_min + 1) + x_min;
+  }
+
+}
+
 int main()
 {
 
   int N;
   printf("Input N: ");
   scanf("%d", &N);
+  if (N <= 0){
+    printf("Input correct N:");
+    return 1;
+  }
 
   int x_min, x_max;
   printf("Enter the minimum value of the range: ");
@@ -16,28 +37,16 @@ int main()
   printf("Enter the maximum value of the range: ");
   scanf("%d", &x_max);
 
-  int *A = (int *)malloc(sizeof(int) * N);
-  if (A == NULL)
+  int *A = generate_array(N);
+  int *A1 = generate_array(N);
+  int *A2 = generate_array(N);
+  if ((A == NULL) || (A1 == NULL) || (A2 == NULL))
   {
+    printf("Memory allocation error");
     return 1;
   }
-  int *A1 = (int *)malloc(sizeof(int) * N);
-  if (A1 == NULL)
-  {
-    return 1;
-  }
-  int *A2 = (int *)malloc(sizeof(int) * N);
-  if (A2 == NULL)
-  {
-    return 1;
-  }
-
-  srand(time(NULL));
-  for (int i = 0; i < N; i++)
-  {
-    *(A + i) = rand() % (x_max - x_min + 1) + x_min;
-  }
-
+  
+  Random_filling(A, N, x_max, x_min);
   int count1 = 0;
   int count2 = 0;
   printf("Massive A: \n");
@@ -74,11 +83,13 @@ int main()
     }
   }
 
-  int *B = (int *)malloc(sizeof(int) * (count1 + count2));
+  int *B = generate_array(count1 + count2);
   if (B == NULL)
   {
+    printf("Memory allocation error");
     return 1;
   }
+
   for (int i = 0; i < count1; i++)
   {
     B[i] = A1[i];
@@ -88,6 +99,7 @@ int main()
     B[i + count1] = A2[i];
   }
   printf("Massive B: \n");
+
   for (int i = 0; i < count1 + count2; i++)
   {
     printf("%d ", B[i]);
