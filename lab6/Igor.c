@@ -4,10 +4,10 @@
 #include <math.h>
 #include <time.h>
 
-#define MAX_COORDS 100 // Максимальное количество координат
+#define MAX_COORDS 100
 
 // Функция для определения попадания точки в заданную область
-int isInArea(double x, double y, double R)
+int isInArea(float x, float y, float R)
 {
   bool a1 = pow(x + R, 2) + pow((y - R), 2) >= pow(R, 2);
   bool b1 = pow(x - R, 2) + pow((y - R), 2) >= pow(R, 2);
@@ -18,29 +18,31 @@ int isInArea(double x, double y, double R)
   return (a1 && b1 && c1 && d1 && a && b);
 }
 
-void printResults(double (*coords)[2], int N, double R)
+void printResults(float(*coords), int N, float R)
 {
   printf("Points inside the area:\n");
   for (int i = 0; i < N; i++)
   {
-    if (isInArea((*(coords + i))[0], (*(coords + i))[1], R))
+    float x = *(coords + i * 2), y = *(coords + i * 2 + 1);
+    // printf("(%.2lf, %.2lf) %.2lf\n", x, y, isInArea(x, y, a, R));
+    if (isInArea(x, y, R))
     {
-      printf("(%.2lf, %.2lf)\n", (*(coords + i))[0], (*(coords + i))[1]);
+      printf("(%.2lf, %.2lf)\n", (*(coords + i * 2)), (*(coords + i * 2 + 1)));
     }
   }
 
   printf("Points outside the area:\n");
   for (int i = 0; i < N; i++)
   {
-    if (!isInArea((*(coords + i))[0], (*(coords + i))[1], R))
+    if (!isInArea((*(coords + i * 2)), (*(coords + i * 2 + 1)), R))
     {
-      printf("(%.2lf, %.2lf)\n", (*(coords + i))[0], (*(coords + i))[1]);
+      printf("(%.2lf, %.2lf)\n", (*(coords + i * 2)), (*(coords + i * 2 + 1)));
     }
   }
 }
 
 // Функция для задания массива через random
-void randomCoords(int N, double R, double (*coords)[2])
+void randomCoords(int N, float R, float(*coords))
 {
   double x_min, x_max, y_min, y_max;
   printf("Enter the minimum value of x: ");
@@ -55,30 +57,30 @@ void randomCoords(int N, double R, double (*coords)[2])
 
   for (int i = 0; i < N; i++)
   {
-    (*(coords + i))[0] = x_min + (double)rand() / RAND_MAX * (x_max - x_min);
-    (*(coords + i))[1] = y_min + (double)rand() / RAND_MAX * (y_max - y_min);
+    (*(coords + i * 2)) = x_min + (float)rand() / RAND_MAX * (x_max - x_min);
+    (*(coords + i * 2 + 1)) = y_min + (float)rand() / RAND_MAX * (y_max - y_min);
   }
 
   for (int i = 0; i < N; i++)
   {
-    printf("Point %d: (%.2lf, %.2lf)\n", i + 1, (*(coords + i))[0], (*(coords + i))[1]);
+    printf("Point %d: (%.2lf, %.2lf)\n", i + 1, (*(coords + i * 2)), (*(coords + i * 2 + 1)));
   }
 
   printResults(coords, N, R);
 }
 
 // Функция для задания массива координат через ввод с клавиатуры
-void inputCoords(int N, double R, double (*coords)[2])
+void inputCoords(int N, float R, float(*coords))
 {
   for (int i = 0; i < N; i++)
   {
     printf("Input coords %d (x y): ", i + 1);
-    scanf("%lf %lf", &(*(coords + i))[0], &(*(coords + i))[1]);
+    scanf("%f %f", &(*(coords + i * 2)), &(*(coords + i * 2 + 1)));
   }
 
   for (int i = 0; i < N; i++)
   {
-    printf("Point %d: (%.2lf, %.2lf)\n", i + 1, (*(coords + i))[0], (*(coords + i))[1]);
+    printf("Point %d: (%.2lf, %.2lf)\n", i + 1, (*(coords + i * 2)), (*(coords + i * 2 + 1)));
   }
 
   printResults(coords, N, R);
@@ -86,9 +88,9 @@ void inputCoords(int N, double R, double (*coords)[2])
 
 int main()
 {
-  double R;
+  float R;
   printf("Input R:\n");
-  scanf("%lf", &R);
+  scanf("%f", &R);
   if ((R < 0))
   {
     printf("Invalid values. Try again");
@@ -109,22 +111,23 @@ int main()
   printf("2. Randomly\n");
   scanf("%d", &choice);
 
-  double coords[MAX_COORDS][2];
+  float coords[MAX_COORDS * 2];
 
-  void (*funcs[])(int, double, double(*)[2]) = {inputCoords, randomCoords};
+  void (*funcs)(int, float, float(*));
   if (choice == 1)
   {
-    funcs[0](N, R, coords);
+    funcs = inputCoords;
   }
   else if (choice == 2)
   {
-    funcs[1](N, R, coords);
+    funcs = randomCoords;
   }
   else
   {
     printf("Wrong choice.\n");
     return 1;
   }
+  funcs(N, R, (float *)coords);
 
   return 0;
 }
