@@ -25,6 +25,16 @@ void *delete_element(int *data, int K){
   return data;
 }
 
+void *search(int *data){
+  for (int i = 1; i < data[0]; i++){
+    if (data[i] % 2 == 0){
+      data[i] = 0;
+      return data;
+    }
+  }
+  return data;
+}
+
 int main()
 {
 
@@ -88,9 +98,15 @@ int main()
   }
 
   coords[0] = delete_element(coords[0], K);
-  for (int i = 0; i <= *coords[0]; i ++){
-    printf("%d ", coords[0][i]);
+  coords[1] = search(coords[1]);
+  for (int i = 0; i <= coords[0][0]; i++)
+  {
+    printf("%d  ", coords[0][i]);
   }
+  for (int i = 0; i <= coords[1][0]; i ++){
+    printf("%d ", coords[1][i]);
+  }
+  
 
   // Освобождение выделенной памяти
   for (int i = 0; i < A; i++)
