@@ -9,7 +9,7 @@ void *delete_element(int *data, int K){
   if ((K > data[0]) || (K <= 0)){
     return data;
   }
-  //printf("%d ", data[0]);
+
   int *arr = malloc(sizeof(int) * (data[0]));
   int count = 1;
   for (int i = 1; i < K; i++){
@@ -37,7 +37,7 @@ void *search(int *data){
 
 void *append(int *data, int K, int N, int a_min, int b_max){
   srand(time(NULL));
-  if ((K > data[0]) || (K <= 0))
+  if ((K > data[0]) || (K <= 0) || N <= 0)
   {
     return data;
   }
@@ -59,6 +59,58 @@ void *append(int *data, int K, int N, int a_min, int b_max){
   arr[0] = data[0] + N;
   free(data);
   data = arr;
+  return data;
+}
+
+void *cyclic_shift_element_left(int *data, int M)
+{
+  if (M < 0){
+    return data;
+  }
+  int *arr = malloc(sizeof(int) * (data[0] + 1)); // Выделяем память для нового массива
+  arr[0] = data[0];                               // Сохраняем размер массива
+  int count = 1;                                  // Индекс для заполнения нового массива
+
+  for (int i = 1; i <= data[0]; i++)
+  {
+    if (data[i] == 0)
+    {
+      int new_index = (i - M + data[0]) % data[0]; // good
+
+      // Сдвиг влево
+      if (i > new_index)
+      {
+        for (int j = i; j > new_index; j--)
+        {
+          arr[count++] = data[j - 1];
+        }
+      }
+      else if (i < new_index)
+      {
+        for (int j = i + 1; j <= data[0]; j++)
+        {
+          arr[count++] = data[j];
+        }
+        for (int j = 1; j <= new_index; j++)
+        {
+          arr[count++] = data[j];
+        }
+      }
+      else
+      {
+        arr[count++] = data[i]; //  i == new_index
+      }
+      arr[count++] = 0; // Добавляем ноль на новое место
+    }
+    else
+    {
+      arr[count++] = data[i]; //  i == new_index
+    }
+  }
+
+  free(data);
+  data = arr; // Переназначаем указатель data на arr
+
   return data;
 }
 
@@ -110,29 +162,58 @@ int main()
 
   for (int i = 0; i < A; i++)
   {
-    for (int j = 0; j < B + 1; j++)
+    for (int j = 0; j < coords[i][0] + 1; j++)
     {
-      printf("%d ", coords[i][j]); // Исправлено!
+      printf("%d ", coords[i][j]); 
     }
-    printf("\n"); // Добавлен вывод новой строки
+    printf("\n");
   }
+
   int K;
-  printf("Input index element you want delete: \n");
+  printf("Input index element: \n");
   scanf("%d", &K);
 
-  coords[0] = delete_element(coords[0], K);
-  coords[1] = search(coords[1]);
-  coords[2] = append(coords[2], 4, 2,  a_min, b_max);
-  for (int i = 0; i <= coords[0][0]; i++)
-  {
-    printf("%d  ", coords[0][i]);
+  int N;
+  printf("Enter the number of numbers you want to add: \n");
+  scanf("%d", &N);
+
+  int M;
+  printf("Enter the offset for the zeros: \n");
+  scanf("%d", &M);
+
+  for (int i = 0; i < A; i++){
+    if (i % 4 == 0){
+      coords[i] = delete_element(coords[i], K);
+    }
+    else if( i % 4 == 1){
+      coords[i] = append(coords[i], K, N, a_min, b_max);
+    }
+    else if (i % 4 == 2){
+      coords[i] = cyclic_shift_element_left(coords[i], -10);
+    }
+    else{
+      coords[i] = search(coords[i]);
+    }
   }
-  for (int i = 0; i <= coords[1][0]; i ++){
-    printf("%d ", coords[1][i]);
-  }
-  for (int i = 0; i <= coords[2][0]; i++)
+  //int K;
+  //printf("Input index element you want delete: \n");
+  //scanf("%d", &K);
+  //coords[0] = delete_element(coords[0], K);
+  //coords[1] = search(coords[1]);
+  //coords[2] = append(coords[2], 4, 2,  a_min, b_max);
+  //coords[3] = cyclic_shift_element_left(coords[3], 2);
+  for (int i = 0; i < A; i++)
   {
-    printf("%d ", coords[2][i]);
+    for (int j = 0; j < coords[i][0] + 1; j++)
+    {
+      if (j == coords[i][0]){
+        printf("%d\n", coords[i][j]);
+        break;
+      }
+
+      printf("%d ", coords[i][j]);
+    }
+    printf("\n");
   }
 
   // Освобождение выделенной памяти
