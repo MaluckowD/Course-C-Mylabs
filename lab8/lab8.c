@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
 #include <time.h>
 
 void *delete_element(int *data, int K){
@@ -62,56 +61,56 @@ void *append(int *data, int K, int N, int a_min, int b_max){
   return data;
 }
 
-void *cyclic_shift_element_left(int *data, int M)
+void *cyclicShiftZeroes(int *line, int m)
 {
-  if (M < 0){
-    return data;
-  }
-  int *arr = malloc(sizeof(int) * (data[0] + 1)); // Выделяем память для нового массива
-  arr[0] = data[0];                               // Сохраняем размер массива
-  int count = 1;                                  // Индекс для заполнения нового массива
 
-  for (int i = 1; i <= data[0]; i++)
+  if (m < 0)
   {
-    if (data[i] == 0)
-    {
-      int new_index = (i - M + data[0]) % data[0]; // good
+    printf("M must be >= 0\n");
+    exit(1);
+  }
 
-      // Сдвиг влево
-      if (i > new_index)
-      {
-        for (int j = i; j > new_index; j--)
-        {
-          arr[count++] = data[j - 1];
-        }
-      }
-      else if (i < new_index)
-      {
-        for (int j = i + 1; j <= data[0]; j++)
-        {
-          arr[count++] = data[j];
-        }
-        for (int j = 1; j <= new_index; j++)
-        {
-          arr[count++] = data[j];
-        }
-      }
-      else
-      {
-        arr[count++] = data[i]; //  i == new_index
-      }
-      arr[count++] = 0; // Добавляем ноль на новое место
-    }
-    else
+  int n = line[0];
+
+  int *zeroes = (int *)malloc(n * sizeof(int));
+  if (zeroes == NULL)
+  {
+    printf("Segmentation error!\n");
+    exit(1);
+  }
+
+  int zeroes_counter = 0;
+  for (int i = 1; i <= n; ++i)
+    if (line[i] == 0)
+      zeroes[zeroes_counter++] = (i - m + n) % n;
+
+  int *new_line = (int *)malloc((n + 1) * sizeof(int));
+  if (new_line == NULL)
+  {
+    printf("Segmentation error!\n");
+    exit(1);
+  }
+  new_line[0] = line[0];
+
+  for (int i = 0; i < zeroes_counter; ++i)
+    new_line[zeroes[i]] = 0;
+
+  int ptr = 1;
+  for (int i = 1; i <= n; ++i)
+  {
+    if (new_line[i] != 0)
     {
-      arr[count++] = data[i]; //  i == new_index
+      while (line[ptr] == 0)
+        ptr++;
+      new_line[i] = line[ptr];
+      ptr++;
     }
   }
 
-  free(data);
-  data = arr; // Переназначаем указатель data на arr
+  free(zeroes);
+  free(line);
 
-  return data;
+  return new_line;
 }
 
 int main()
@@ -124,11 +123,12 @@ int main()
   printf("Input Enter the left and right generation range: \n");
   scanf("%d %d", &a_min, &b_max);
 
+  printf("The original matrix:\n");
   int **coords = (int **)malloc(A * sizeof(int *)); 
   if (coords == NULL)
   {
     printf("Error: Memory allocation failed\n");
-    return NULL;
+    return 1;
   }
 
   for (int i = 0; i < A; i++)
@@ -142,7 +142,7 @@ int main()
         free(coords[j]);
       }
       free(coords);
-      return NULL;
+      return 1;
     }
   }
   
@@ -189,19 +189,13 @@ int main()
       coords[i] = append(coords[i], K, N, a_min, b_max);
     }
     else if (i % 4 == 2){
-      coords[i] = cyclic_shift_element_left(coords[i], -10);
+      coords[i] = cyclicShiftZeroes(coords[i], M);
     }
     else{
       coords[i] = search(coords[i]);
     }
   }
-  //int K;
-  //printf("Input index element you want delete: \n");
-  //scanf("%d", &K);
-  //coords[0] = delete_element(coords[0], K);
-  //coords[1] = search(coords[1]);
-  //coords[2] = append(coords[2], 4, 2,  a_min, b_max);
-  //coords[3] = cyclic_shift_element_left(coords[3], 2);
+  printf("The final matrix: \n");
   for (int i = 0; i < A; i++)
   {
     for (int j = 0; j < coords[i][0] + 1; j++)
@@ -216,7 +210,6 @@ int main()
     printf("\n");
   }
 
-  // Освобождение выделенной памяти
   for (int i = 0; i < A; i++)
   {
     free(coords[i]);
