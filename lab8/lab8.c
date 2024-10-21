@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+#define DEFAULT_VALUE 100000
+
 void *delete_element(int *data, int K){
 
   if ((K > data[0]) || (K <= 0)){
@@ -10,6 +12,9 @@ void *delete_element(int *data, int K){
   }
 
   int *arr = malloc(sizeof(int) * (data[0]));
+  if (arr == NULL){
+    return data;
+  }
   int count = 1;
   for (int i = 1; i < K; i++){
     arr[count++] = data[i];
@@ -42,6 +47,10 @@ void *append(int *data, int K, int N, int a_min, int b_max){
   }
 
   int *arr = malloc(sizeof(int) * (N + data[0] + 1));
+  if (arr == NULL)
+  {
+    return data;
+  }
   int count = 1;
   for (int i = 1; i < K; i++ ){
     arr[count++] = data[i];
@@ -69,9 +78,6 @@ void *cyclicShiftZeroes(int *line, int m)
     printf("M must be >= 0\n");
     exit(1);
   }
-  if (m == 0){
-    return line;
-  }
 
   int n = line[0];
 
@@ -83,9 +89,10 @@ void *cyclicShiftZeroes(int *line, int m)
   }
 
   int zeroes_counter = 0;
+
   for (int i = 1; i <= n; ++i)
     if (line[i] == 0)
-      zeroes[zeroes_counter++] = (i - m + n) % n;
+      zeroes[zeroes_counter++] = (i - 1 - m + n) % n + 1;
 
   int *new_line = (int *)malloc((n + 1) * sizeof(int));
   if (new_line == NULL)
@@ -95,13 +102,16 @@ void *cyclicShiftZeroes(int *line, int m)
   }
   new_line[0] = line[0];
 
+  for (int i = 1; i <= n; ++i)
+    new_line[i] = DEFAULT_VALUE;
+
   for (int i = 0; i < zeroes_counter; ++i)
     new_line[zeroes[i]] = 0;
 
   int ptr = 1;
   for (int i = 1; i <= n; ++i)
   {
-    if (new_line[i] != 0)
+    if (new_line[i] == DEFAULT_VALUE)
     {
       while (line[ptr] == 0)
         ptr++;
