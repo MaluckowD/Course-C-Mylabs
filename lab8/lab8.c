@@ -69,6 +69,9 @@ void *cyclicShiftZeroes(int *line, int m)
     printf("M must be >= 0\n");
     exit(1);
   }
+  if (m == 0){
+    return line;
+  }
 
   int n = line[0];
 
@@ -119,13 +122,21 @@ int main()
   int A, B;
   printf("Input A, B: \n");
   scanf("%d %d", &A, &B);
+  if ((A < 0) && (B < 0)){
+    printf("Input correct A and B\n");
+    return 0;
+  }
   int a_min, b_max;
   printf("Input Enter the left and right generation range: \n");
   scanf("%d %d", &a_min, &b_max);
+  if (a_min >= b_max){
+    printf("Input correct a_min < b_max\n");
+    return 0;
+  }
 
   printf("The original matrix:\n");
-  int **coords = (int **)malloc(A * sizeof(int *)); 
-  if (coords == NULL)
+  int **ar = (int **)malloc(A * sizeof(int *)); 
+  if (ar == NULL)
   {
     printf("Error: Memory allocation failed\n");
     return 1;
@@ -133,22 +144,22 @@ int main()
 
   for (int i = 0; i < A; i++)
   {
-    coords[i] = (int *)malloc((B + 1)  * sizeof(int));
-    if (coords[i] == NULL)
+    ar[i] = (int *)malloc((B + 1)  * sizeof(int));
+    if (ar[i] == NULL)
     {
       printf("Error: Memory allocation failed\n");
       for (int j = 0; j < i; j++)
       {
-        free(coords[j]);
+        free(ar[j]);
       }
-      free(coords);
+      free(ar);
       return 1;
     }
   }
   
   for (int i = 0; i < A; i++)
   {
-    coords[i][0] = B;
+    ar[i][0] = B;
   }
 
   srand(time(NULL));
@@ -156,15 +167,15 @@ int main()
   {
     for (int j = 1; j < B + 1; j++)
     {
-      coords[i][j] = rand() % (b_max - a_min + 1) + a_min;
+      ar[i][j] = rand() % (b_max - a_min + 1) + a_min;
     }
   }
 
   for (int i = 0; i < A; i++)
   {
-    for (int j = 0; j < coords[i][0] + 1; j++)
+    for (int j = 0; j < ar[i][0] + 1; j++)
     {
-      printf("%d ", coords[i][j]); 
+      printf("%d ", ar[i][j]); 
     }
     printf("\n");
   }
@@ -183,38 +194,38 @@ int main()
 
   for (int i = 0; i < A; i++){
     if (i % 4 == 0){
-      coords[i] = delete_element(coords[i], K);
+      ar[i] = delete_element(ar[i], K);
     }
     else if( i % 4 == 1){
-      coords[i] = append(coords[i], K, N, a_min, b_max);
+      ar[i] = append(ar[i], K, N, a_min, b_max);
     }
     else if (i % 4 == 2){
-      coords[i] = cyclicShiftZeroes(coords[i], M);
+      ar[i] = cyclicShiftZeroes(ar[i], M);
     }
     else{
-      coords[i] = search(coords[i]);
+      ar[i] = search(ar[i]);
     }
   }
   printf("The final matrix: \n");
   for (int i = 0; i < A; i++)
   {
-    for (int j = 0; j < coords[i][0] + 1; j++)
+    for (int j = 0; j < ar[i][0] + 1; j++)
     {
-      if (j == coords[i][0]){
-        printf("%d\n", coords[i][j]);
+      if (j == ar[i][0]){
+        printf("%d\n", ar[i][j]);
         break;
       }
 
-      printf("%d ", coords[i][j]);
+      printf("%d ", ar[i][j]);
     }
     printf("\n");
   }
 
   for (int i = 0; i < A; i++)
   {
-    free(coords[i]);
+    free(ar[i]);
   }
-  free(coords);
+  free(ar);
 
   return 0;
 }
