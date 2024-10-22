@@ -11,30 +11,44 @@ int main(int argc, char *argv[])
   int count = 0;
   char *pt = str;
   char *ptr = strpbrk(str, "!?.");
-  // printf("%p %p", str, ptr);
+
   if (ptr != pt)
   {
     count++;
   }
+
   ptr++;
   pt = ptr;
 
-  while (pt != NULL)
+  while (ptr != NULL)
   {
-    ptr = strpbrk(str, "!?.");
+    ptr = strpbrk(pt, "!?.`\0`");
+
     if (pt == ptr)
     {
       ptr++;
       pt = ptr;
       continue;
     }
+    if (ptr == NULL){
+      break;
+    }
     count++;
+
     ptr++;
     pt = ptr;
+
+  }
+
+  int n = strlen(str);
+  if ((str[n - 1] != '!' && str[n - 1] != '?' && str[n - 1] != '.') && (str[n] == '\0'))
+  {
+
+    count++;
   }
 
   printf("%d\n", count);
-  puts(str);
+  
 
   return 0;
 }
