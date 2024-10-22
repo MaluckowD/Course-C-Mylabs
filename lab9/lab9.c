@@ -4,10 +4,7 @@
 #include <time.h>
 #include <string.h>
 
-int main(int argc, char *argv[])
-{
-  char str[1000];
-  strcpy(str, argv[1]);
+int info_count(char str[]){
   int count = 0;
   char *pt = str;
   char *ptr = strpbrk(str, "!?.");
@@ -30,14 +27,14 @@ int main(int argc, char *argv[])
       pt = ptr;
       continue;
     }
-    if (ptr == NULL){
+    if (ptr == NULL)
+    {
       break;
     }
     count++;
 
     ptr++;
     pt = ptr;
-
   }
 
   int n = strlen(str);
@@ -46,6 +43,14 @@ int main(int argc, char *argv[])
 
     count++;
   }
+  return count;
+}
+
+int main(int argc, char *argv[])
+{
+  char str[1000];
+  strcpy(str, argv[1]);
+  int count = info_count(str);
 
   printf("%d\n", count);
   
