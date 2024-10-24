@@ -1,7 +1,6 @@
 ﻿#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <time.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -47,40 +46,14 @@ int info_count(char str[])
   return count;
 }
 
-void create()
+void *create(char *str, char **ar)
 {
-  // Реализуйте функцию create()
-}
-
-int main(int argc, char *argv[])
-{
-  char str[1000];
-  strcpy(str, argv[1]);
-  int count = info_count(str); // Количество слов
-
-  // Выделение памяти для массива указателей на строки
-  char **ar = (char **)malloc(count * sizeof(char *));
-  if (ar == NULL)
-  {
-    return 1; // Обработка ошибки: не удалось выделить память
-  }
-
-  // Выделение памяти для каждой строки
-  for (int i = 0; i < count; i++)
-  {
-    ar[i] = (char *)malloc(100 * sizeof(char));
-    if (ar[i] == NULL)
-    {
-      return 1; // Обработка ошибки: не удалось выделить память
-    }
-  }
-
   const char delimiters[] = ",.!? ";
   const char glas[] = "йцкнгшщзхфвпрлджчсмтб";
   const char sogl[] = "уеыаоэюия";
   char *token = strtok(str, delimiters);
-
-  int c = 0; // Счетчик для массива ar
+  const char num[] = "0123456789";
+  int c = 0;
   while (token != NULL)
   {
     int count1 = 0;
@@ -106,15 +79,63 @@ int main(int argc, char *argv[])
     token = strtok(NULL, delimiters);
   }
 
-  printf("%d\n", count); // Вывод количества слов
-
-  // Вывод слов, в которых согласных больше, чем гласных
   for (int i = 0; i < c; i++)
   {
     puts(ar[i]);
   }
+}
 
-  // Освобождение памяти
+void *remove_trailing_numbers(char *text)
+{
+  int len = strlen(text);
+  int i = len - 1;
+
+  // Проходим по строке справа налево
+  while (i >= 0)
+  {
+    // Если нашли пунктуационный знак
+    if (text[i] == '!' || text[i] == '?' || text[i] == '.')
+    {
+      // Удаляем цифры до начала предложения
+      while (i >= 0 && isdigit(text[i]))
+      {
+        text[i] = '\0';
+        i--;
+      }
+    }
+    i--;
+  }
+}
+
+int main(int argc, char *argv[])
+{
+  char str[1000];
+  strcpy(str, argv[1]);
+  char str1[1000];
+  strcpy(str1, argv[1]);
+  int count = info_count(str); 
+
+  char **ar = (char **)malloc(count * sizeof(char *));
+  if (ar == NULL)
+  {
+    return 1;
+  }
+
+  for (int i = 0; i < count; i++)
+  {
+    ar[i] = (char *)malloc(100 * sizeof(char));
+    if (ar[i] == NULL)
+    {
+      return 1; 
+    }
+  }
+
+  create(str, ar);
+  printf("%d\n", count);
+  puts(str1);
+  remove_trailing_numbers(str1);
+  puts(str1);
+
   for (int i = 0; i < count; i++)
   {
     free(ar[i]);
