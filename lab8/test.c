@@ -67,7 +67,6 @@ void *append(int *data, int K, int N, int a_min, int b_max)
   data[0] += N;
 
 }
-
 void cyclicShiftZeroes(int *line, int m)
 {
   if (m < 0)
@@ -77,48 +76,68 @@ void cyclicShiftZeroes(int *line, int m)
   }
 
   int n = line[0];
+  int count_zeroes = 0;
 
-  if (line[0] == 0)
-  {
-    int count = 0;
-    while (count < m)
-    {
-      int temp = line[n];
-      line[n] = line[1];
-      line[1] = temp;
-      count++;
-    }
-  }
 
   for (int i = 1; i <= n; i++)
   {
     if (line[i] == 0)
     {
-      int new = i;
-      unsigned int new_index = (new - 1 - m + n) % n + 1;
-      int count = 0;
-      while (count != m)
-      {
-        if (new == 1)
-        {
-          int temp = line[n];
-          line[n] = line[1];
-          line[1] = temp;
-          count++;
-          new = n;
-          continue;
-        }
-        else
-        {
-          int temp = line[new - 1];
-          line[new - 1] = line[new];
-          line[new] = temp;
-          --new;
-          count++;
-        }
-      }
+      count_zeroes++;
     }
   }
+
+
+  int *zero_indices = (int *)malloc((count_zeroes + 1) * sizeof(int));
+  if (zero_indices == NULL)
+  {
+    printf("Ошибка выделения памяти\n");
+    exit(1);
+  }
+  zero_indices[0] = count_zeroes;
+
+  int index = 1;
+  for (int i = 1; i <= n; i++)
+  {
+    if (line[i] == 0)
+    {
+      zero_indices[index] = i;
+      index++;
+    }
+  }
+
+
+  for (int i = 1; i <= zero_indices[0]; i++)
+  {
+    int new = zero_indices[i];
+    int count = 0;
+    while (count != m)
+    {
+      if (new == 1)
+      {
+        int temp = line[n];
+        line[n] = line[1];
+        line[1] = temp;
+        count++;
+        new = n;
+        zero_indices[i] = n; // Обновляем индекс сдвинутого нуля
+      }
+      else
+      {
+        int temp = line[new - 1];
+        line[new - 1] = line[new];
+        line[new] = temp;
+        --new;
+        count++;
+        zero_indices[i] = new; // Обновляем индекс сдвинутого нуля
+      }
+
+      // Обновляем индексы остальных нулей
+
+    }
+  }
+
+  free(zero_indices); 
 }
 
 int main()
