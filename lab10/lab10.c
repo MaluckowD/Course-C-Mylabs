@@ -1,5 +1,50 @@
 
 #include "./funcs.inc"
+#define VISITED 1
+void *cyclicShiftZeroes(int *line, int m)
+{
+  if (m < 0)
+  {
+    printf("M must be >= 0\n");
+    exit(1);
+  }
+  int n = line[0];
+  bool visited[1000];
+  for (int k = 1; k <= m; k++){
+    // тут задаем все по нулям
+    for (int i = 1; i <= n; i++)
+    {
+      visited[i] = false;
+    }
+    for (int i = 1; i <= line[0]; i++){
+      if (line[i] == 0 && visited[i] == false){
+        if (i == 1)
+        {
+          for (int i = 1; i <= line[0]; i++)
+          {
+            line[i] = line[i + 1];
+          }
+          line[n] = 0;
+          visited[n] = true;
+        }
+        else
+        {
+          int temp = line[i - 1];
+          line[i - 1] = line[i];
+          line[i] = temp;
+          visited[i-1] = true;
+        }
+      }
+    }
+    for (int i = 1; i<= line[0]; i++){
+      if (i == line[0]){
+        printf("%d\n", line[i]);
+        break;
+      }
+      printf("%d ", line[i]);
+    }
+  }
+}
 
 int main()
 {
