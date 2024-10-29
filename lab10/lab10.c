@@ -1,10 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-#include "./funcs.inc.h"
 
-TYPE main()
+#include "./funcs.inc"
+
+int main()
 {
 
   TYPE A, B;
@@ -86,7 +83,11 @@ TYPE main()
   {
     if (i % 4 == 0)
     {
+#ifdef DELETE_ELEM
       delete_element(ELEM(ar, i), K);
+#else
+      delete_last_elements(ELEM(ar, i), K);
+#endif
     }
     else if (i % 4 == 1)
     {
@@ -94,7 +95,7 @@ TYPE main()
     }
     else if (i % 4 == 2)
     {
-      ELEM(ar, i) = cyclicShiftZeroes(ELEM(ar, i), M);
+      cyclicShiftZeroes(ELEM(ar, i), M);
     }
     else
     {
