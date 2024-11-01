@@ -5,13 +5,13 @@
 
 typedef struct Vector3d
 {
-  double x;
-  double y;
-  double z;
+  float x;
+  float y;
+  float z;
   bool norm;
 } Vector3d;
 
-Vector3d create_vector(double x, double y, double z, bool norm)
+Vector3d create_vector(float x, float y, float z, bool norm)
 {
 
   return (Vector3d){x, y, z, norm};
@@ -29,9 +29,9 @@ Vector3d difference_vectors(const Vector3d *v1, const Vector3d *v2)
 
 double angle(const Vector3d *v1, const Vector3d *v2)
 {
-  double a = (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
-  double b = sqrt((pow(v1->x, 2) + pow(v1->y, 2) + pow(v1->z, 2)) * (pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2)));
-  return acos((double)a / b);
+  float a = (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
+  float b = sqrt((pow(v1->x, 2) + pow(v1->y, 2) + pow(v1->z, 2)) * (pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2)));
+  return acos((float)a / b);
 }
 
 Vector3d vector_multiplication(const Vector3d *v1, const Vector3d *v2)
@@ -42,30 +42,33 @@ Vector3d vector_multiplication(const Vector3d *v1, const Vector3d *v2)
 Vector3d projection_vector(const Vector3d *v1, const Vector3d *v2)
 {
   int scalar = (v1->x * v2->x) + (v1->y * v2->y) + (v1->z * v2->z);
-  double len = sqrt(pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2));
-  double projection_scal = (double)scalar / len;
+  printf("Скалярное произведение: %d\n", scalar);
+  float len = sqrt(pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2));
+  printf("Длина вектора a2: %.2f\n", len);
+  float projection_scal = (float)scalar / len;
+  printf("Длина проекции a1 на a2: %.2f\n", projection_scal);
   return (Vector3d){
-      projection_scal * v2->x / (double)len,
-      projection_scal * v2->y / (double)len,
-      projection_scal * v2->z / (double)len,
+      projection_scal * v2->x / (float)len,
+      projection_scal * v2->y / (float)len,
+      projection_scal * v2->z / (float)len,
   };
 }
 
 void normalization(Vector3d *v){
-  double len = sqrt(pow(v->x, 2) + pow(v->y, 2) + pow(v->z, 2));
+  float len = sqrt(pow(v->x, 2) + pow(v->y, 2) + pow(v->z, 2));
   
-  v->x = v->x / (double)len;
-  v->y = v->y / (double)len;
-  v->z = v->z / (double)len;
+  v->x = v->x / (float)len;
+  v->y = v->y / (float)len;
+  v->z = v->z / (float)len;
   v->norm = true;
 }
 
 void print_vector(Vector3d *v){
   if (v->norm == true){
-    printf("(%lf, %lf, %lf) [нормализован]\n", v->x, v->y, v->z);
+    printf("(%.2f, %.2f, %.2f) [нормализован]\n", v->x, v->y, v->z);
   }
   else{
-    printf("(%lf, %lf, %lf) [не нормализован]\n", v->x, v->y, v->z);
+    printf("(%.2f, %.2f, %.2f) [не нормализован]\n", v->x, v->y, v->z);
   }
 }
 
@@ -85,7 +88,7 @@ int main()
   print_vector(&def);
   printf("the angle between the vectors in radians:\n");
   double res = angle(&a1, &a2);
-  printf("%lf\n", res);
+  printf("%.2f\n", res);
   printf("vector product:\n");
   Vector3d mult = vector_multiplication(&a1, &a2);
   print_vector(&mult);
