@@ -30,9 +30,7 @@ Vector3d difference_vectors(const Vector3d *v1, const Vector3d *v2)
 double angle(const Vector3d *v1, const Vector3d *v2)
 {
   double a = (v1->x * v2->x + v1->y * v2->y + v1->z * v2->z);
-  printf("%lf ", a);
   double b = sqrt((pow(v1->x, 2) + pow(v1->y, 2) + pow(v1->z, 2)) * (pow(v2->x, 2) + pow(v2->y, 2) + pow(v2->z, 2)));
-  printf("%lf ", b);
   return acos((double)a / b);
 }
 
@@ -75,19 +73,27 @@ int main()
 {
   Vector3d a1 = create_vector(2, 2, 2, false);
   Vector3d a2 = create_vector(5, 12, 0, false);
-  printf("%lf %lf %lf\n", a1.x, a1.y, a1.z);
-  printf("%lf %lf %lf\n", a2.x, a2.y, a2.z);
+  printf("vector a1:\n");
+  print_vector(&a1);
+  printf("vector a2:\n");
+  print_vector(&a2);
+  printf("vector a1 + a2:\n");
   Vector3d sum = sum_vectors(&a1, &a2);
-  printf("%lf %lf %lf\n", sum.x, sum.y, sum.z);
+  print_vector(&sum);
+  printf("vector a1 - a2:\n");
   Vector3d def = difference_vectors(&a1, &a2);
-  printf("%lf %lf %lf\n", def.x, def.y, def.z);
+  print_vector(&def);
+  printf("the angle between the vectors in radians:\n");
   double res = angle(&a1, &a2);
   printf("%lf\n", res);
+  printf("vector product:\n");
   Vector3d mult = vector_multiplication(&a1, &a2);
-  printf("%lf %lf %lf\n", mult.x, mult.y, mult.z);
+  print_vector(&mult);
+  printf("Projection of a vector a1 onto a vector a2:\n");
   Vector3d proj = projection_vector(&a1, &a2);
-  printf("%lf %lf %lf\n", proj.x, proj.y, proj.z);
+  print_vector(&proj);
   normalization(&a1);
+  printf("The resulting vectors a1 and a2:\n");
   print_vector(&a1);
   print_vector(&a2);
   return 0;

@@ -242,15 +242,14 @@ int main()
   {
     for (int j = 0; j < ar[i][0] + 1; j++)
     {
-      if (i == 2){
-        if (j == ar[i][0])
-        {
-          printf("%d\n", ar[i][j]);
-        }
-
-        printf("%d ", ar[i][j]);
+      if (j == ar[i][0])
+      {
+        printf("%d\n", ar[i][j]);
+        break;
       }
-      
+
+      printf("%d ", ar[i][j]);
+
     }
     printf("\n");
   }

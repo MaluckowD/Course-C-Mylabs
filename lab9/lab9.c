@@ -46,7 +46,7 @@ int info_count(char str[])
   return count;
 }
 
-void *create(char *str, char **ar)
+void create(char *str, char **ar)
 {
   const char delimiters[] = ",.!? ";
   const char glas[] = "йцкнгшщзхфвпрлджчсмтбЙЦКНГШЩЗХФВПРЛДЖЧСМТБqwrtpsdfghklzxcvbnmQWRTPSDFGHKLZXCVBBNM";
