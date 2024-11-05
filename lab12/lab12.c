@@ -33,7 +33,6 @@ typedef struct PrinterParams
   int count_colors;
 } PrinterParams;
 
-////////////
 // Флаги для состояния устройства
 typedef enum DeviceStateFlags
 {
@@ -59,7 +58,7 @@ typedef struct Device
 } Device;
 
 // Функция создания новой структуры устройства
-Device *createDevice(DeviceType type) //ОК
+Device *createDevice(DeviceType type) 
 {
   Device *device = (Device *)malloc(sizeof(Device));
   if (device == NULL)
@@ -68,7 +67,7 @@ Device *createDevice(DeviceType type) //ОК
     exit(1);
   }
   device->type = type;
-  device->stateFlags = 0;  ///?????????????????
+  device->stateFlags = 0;  
   return device;
 }
 
