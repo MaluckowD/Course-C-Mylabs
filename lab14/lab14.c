@@ -128,32 +128,40 @@ void remove_trailing_numbers(char *text)
 
 int main(int argc, char *argv[])
 {
-  char data[100];
+  char data[1000];
   strcpy(data, argv[1]);
 
-  char buffer[100];
+  char buffer[1000];
 
   FILE *in = fopen(data, "r");
   if (in == NULL){
     return 1;
   }
 
+  char string[20][300];
+  int i = 0;
+  while (fgets(buffer, sizeof(buffer), in)){
+    //puts(buffer);
+    char *ptr = strchr(buffer, '\n');
+    if (ptr != NULL){
+      *ptr = '\n';
+    }
+    strcpy(string[i], buffer);
+    i++;
+  }
+  fclose(in);
+
+  for (int i = 0; i < 5; i++){
+    puts(string[i]);
+  }
+  char choice[10];
   char result[100];
   strcpy(result, argv[2]);
-  FILE *in = fopen(result, "r");
+  FILE *out = fopen(result, "r");
   if (in == NULL)
   {
     return 1;
   }
-
-  while (fgets(buffer, sizeof(buffer), in)){
-    char *ptr = strchr(buffer, "\n");
-    if (ptr != NULL){
-      *ptr = '\n';
-    }
-    puts(buffer);
-  }
-  char choice[10];
   //strcpy(choice, argv[2]);
 
   

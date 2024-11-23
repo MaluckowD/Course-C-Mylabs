@@ -1,5 +1,7 @@
 
 #include "./global.h"
+// gcc main.c Devicefunction.c Vectorfuncs.c
+// ./a.exe
 
 int main(){
   while (true){
