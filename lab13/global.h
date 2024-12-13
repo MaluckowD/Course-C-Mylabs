@@ -70,15 +70,14 @@ typedef struct Device
   unsigned int stateFlags;
 } Device;
 
-Vector3d create_vector(float x, float y, float z, bool norm);
+Vector3d create_vector(float x, float y, float z);
 Vector3d sum_vectors(const Vector3d *v1, const Vector3d *v2);
 Vector3d difference_vectors(const Vector3d *v1, const Vector3d *v2);
 double angle(const Vector3d *v1, const Vector3d *v2);
 Vector3d vector_multiplication(const Vector3d *v1, const Vector3d *v2);
 Vector3d projection_vector(const Vector3d *v1, const Vector3d *v2);
 void normalization(Vector3d *v);
-void print_vector(Vector3d *v);
-
+void print_vector(Vector3d v);
 
 Device *createDevice(DeviceType type);
 void addDevice(Device **arr, int *size, Device *device);

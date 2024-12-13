@@ -18,8 +18,7 @@ int info_count(char str[])
   ptr++;
   pt = ptr;
 
-  while (ptr != NULL)
-  {
+  while (ptr != NULL){
     ptr = strpbrk(pt, "!?.`\0`");
 
     if (pt == ptr)
