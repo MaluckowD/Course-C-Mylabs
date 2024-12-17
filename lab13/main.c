@@ -107,6 +107,7 @@ int main(){
         default:
           printf("Неверный выбор.\n");
         }
+        break;
       }
       case 2:
       {
